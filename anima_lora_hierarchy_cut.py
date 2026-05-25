@@ -8,8 +8,7 @@
 # - Reads and repacks safetensors files without torch, numpy, or the safetensors package.
 # - Keeps the source LoRA unchanged.
 # - Writes generated LoRAs to the same folder as the source LoRA by default.
-# - Avoids double underscores in generated filenames because sd-dynamic-prompts treats
-#   __name__ as wildcard syntax.
+# - Avoids double underscores in generated filenames for safer use in prompt strings and UIs.
 #
 # Target LoRA key style:
 # - Anima / KModel-style LoRA keys such as:
@@ -168,7 +167,7 @@ def is_anima_dit_late_mlp_19_27(module: str) -> bool:
 
 
 def sanitize_name_part(text: str) -> str:
-    # Avoid sd-dynamic-prompts wildcard syntax.
+    # Avoid double underscores for safer use in prompt strings and UIs.
     while "__" in text:
         text = text.replace("__", "_")
 
@@ -532,7 +531,7 @@ def main(argv: List[str] | None = None) -> int:
     print("Anima LoRA hierarchy cutter")
     print("===========================")
     print("No torch / numpy / safetensors package required.")
-    print("Generated filenames avoid double underscores for sd-dynamic-prompts compatibility.")
+    print("Generated filenames avoid double underscores for safer use in prompt strings and UIs.")
     print("")
 
     paths = [Path(p.strip().strip('"')) for p in args.files]
